@@ -182,3 +182,7 @@ textarea{min-height:130px;resize:vertical}
 .prose{max-width:780px}
 .prose h2{font-size:1.35rem;margin-top:2em}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+
+.form .sponsor{background:#84c6f1}
+@media (prefers-color-scheme:dark){.form .sponsor{background:#0f2a22}}
