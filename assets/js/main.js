@@ -42,6 +42,72 @@
     apply();
   }
 
+  // fast-track checklist on the apply page: each item ticks as the visitor completes it
+  var ft = $("[data-ft-box]");
+  if (ft && ft.closest("form")) {
+    var ftForm = ft.closest("form");
+    var ftItems = $$("[data-ft-for]", ft), ftStatus = $("[data-ft-status]", ft);
+    var ftUpdate = function () {
+      var done = 0;
+      ftItems.forEach(function (li) {
+        var el = ftForm.elements[li.getAttribute("data-ft-for")];
+        var ok = !!(el && el.value.trim() && el.checkValidity());
+        li.classList.toggle("done", ok);
+        if (ok) done++;
+      });
+      if (ftStatus) {
+        var all = done === ftItems.length;
+        ftStatus.textContent = all ? "Fast-track unlocked" : done + " of " + ftItems.length + " done";
+        ftStatus.classList.toggle("ok", all);
+      }
+    };
+    ftForm.addEventListener("input", ftUpdate);
+    ftUpdate();
+  }
+
+  // optional extra button just above "Submit application" (apply page only).
+  // Its text, link and note live in assets/js/button.js (a separate file, so a typo there cannot break the forms).
+  var xMark = $("form[data-form] input[name=form_type][value=application]");
+  var xSubmit = xMark && xMark.form && $("button[type=submit]", xMark.form);
+  if (xSubmit) {
+    var xScript = document.createElement("script");
+    xScript.src = "assets/js/button.js";
+    xScript.onload = function () {
+      var c = window.DIGILAB_BUTTON || {};
+      var label = String(c.label || "").trim(), link = String(c.link || "").trim();
+      var note = String(c.note || "").trim();
+      var tag = c.tag === undefined ? "Sponsored" : String(c.tag).trim();
+      if (!label || !link || /^\s*(javascript|data|vbscript):/i.test(link) || $(".extra-cta")) return;
+      var box = document.createElement("div");
+      box.className = "extra-cta";
+      box.style.textAlign = "center";
+      if (tag) {
+        var t = document.createElement("small");
+        t.textContent = tag;
+        t.style.cssText = "display:block;text-transform:uppercase;letter-spacing:.1em;font-size:.68rem;color:var(--muted);margin-bottom:8px";
+        box.appendChild(t);
+      }
+      var a = document.createElement("a");
+      a.className = "btn btn-block";
+      a.href = link;
+      a.target = "_blank";
+      a.rel = "sponsored nofollow noopener";
+      a.textContent = label;
+      a.style.background = "var(--brand2)";
+      a.style.boxShadow = "0 8px 20px -8px var(--brand2)";
+      a.style.setProperty("color", "#0b1220", "important");
+      box.appendChild(a);
+      if (note) {
+        var p = document.createElement("p");
+        p.textContent = note;
+        p.style.cssText = "margin:10px 0 0;font-size:.92rem;color:var(--muted)";
+        box.appendChild(p);
+      }
+      xSubmit.parentNode.insertBefore(box, xSubmit);
+    };
+    document.head.appendChild(xScript);
+  }
+
   // preselect role on apply page (?role=slug)
   var roleSel = $("#role");
   if (roleSel) {
@@ -104,6 +170,7 @@
         Promise.all(jobs).then(function (res) {
           if (res.some(Boolean)) {
             form.reset();
+            form.dispatchEvent(new Event("input", { bubbles: true })); // refresh the fast-track ticks
             show("ok", form.dataset.ok || "Thank you! We received your message and will reply by email soon.");
           } else {
             show("err", "Sorry, something went wrong. Please try again in a moment.");
