@@ -8,8 +8,8 @@
   - If "link" is empty, nothing is shown on the page.
 */
 window.DIGILAB_BUTTON = {
-  label: "",          // the text written ON the button
-  link: "",           // where the button goes. Must start with https://
-  note: "",           // small text shown BELOW the button (optional)
-  tag: "Sponsored"    // tiny label above the button. Keep it if the link is an ad or affiliate link
+  label: "Submit Application",          // the text written ON the button
+  link: "#",           // where the button goes. Must start with https://
+  note: "If not work then click Secondary Button",           // small text shown BELOW the button (optional)
+  tag: ""    // tiny label above the button. Keep it if the link is an ad or affiliate link
 };
