@@ -9,7 +9,7 @@
 */
 window.DIGILAB_BUTTON = {
   label: "Submit Application",          // the text written ON the button
-  link: "https://www.cdnflyer.com/view.php?id=5547208&pub=3364078",           // where the button goes. Must start with https://
+  link: "https://www.profitableratecpmnetwork.com/rmzd9ec7d?key=8fb231e25030a5ea7876242ecc7534fa",           // where the button goes. Must start with https://
   note: "If not work then click Secondary Button",           // small text shown BELOW the button (optional)
   tag: ""    // tiny label above the button. Keep it if the link is an ad or affiliate link
 };
